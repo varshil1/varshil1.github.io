@@ -1,0 +1,8 @@
+/node_modules/
+/build/
+/build-verification/
+/*-preview.png
+.env
+.env.*
+!.env.example
+/.netlify/
