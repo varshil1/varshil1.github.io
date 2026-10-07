@@ -1,7 +1,8 @@
 import ResearchPaper from './ResearchPaper';
 import { useEffect, useRef, useState } from 'react';
 import './systems.scss';
-import AgentTrace from './AgentTrace';
+import VideoDemo from '../video-demo/VideoDemo';
+import './system-animation.css';
 function Illustration({ kind }) {
   return <svg className={`system-illustration illustration-${kind}`} viewBox="0 0 360 180" fill="none" aria-hidden="true">
     <defs><pattern id={`grid-${kind}`} width="24" height="24" patternUnits="userSpaceOnUse"><path d="M24 0H0V24" stroke="currentColor" strokeOpacity=".09" /></pattern></defs>
@@ -39,14 +40,10 @@ export default function Systems() {
     <div className="capability-grid">
       {[['agents','Agentic applications','Tool-connected workflows with clear contracts, human review, and observable decisions.'],['data','Data & retrieval','Reliable ingestion, knowledge-grounded retrieval, and context that earns its place in the prompt.'],['research','Applied research','Computer vision, geospatial analysis, and controlled evaluation of model behavior.']].map(([kind,title,description]) => <article key={kind}><Illustration kind={kind} /><div><h3>{title}</h3><p>{description}</p></div></article>)}
     </div>
-    <AgentTrace visible={visible} motion={motion} />
+    <VideoDemo embedded motion={motion} />
   </section>;
 }
 
 export function ProjectEvidence() { return <div className="project-evidence">    <div className="evidence-grid"><article><strong>86–88%</strong><span>Measured inference cost reduction</span><p>Context engineering and focused agents at TD SYNNEX.</p></article><article><strong>10+ TB</strong><span>Imagery processed for research</span><p>Planet APIs and Meta SAM at Arizona State University.</p></article><article><strong>$20K / mo</strong><span>Data workload savings</span><p>AWS pipeline optimization at Anicca.</p></article></div>
     <ResearchPaper />
 </div>; }
-
-
-
-
