@@ -1,70 +1,153 @@
-# Getting Started with Create React App
+# Varshil Shah Portfolio
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+React portfolio deployed through Netlify for **varshilshah.tech**.
 
-## Available Scripts
+- Repository: https://github.com/varshil1/varshil1.github.io
+- Production branch: `master`
+- Build command: `npm run build`
+- Publish directory: `build`
 
-In the project directory, you can run:
+## Run locally
 
-### `npm start`
+From the project folder:
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+```powershell
+npm ci
+npm start
+```
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+Open http://localhost:3000. On Windows, use `npm.cmd` if PowerShell blocks `npm.ps1`.
 
-### `npm test`
+The committed `.npmrc` contains `legacy-peer-deps=true`. Keep it: older Material UI dependencies declare React 16/17 peers, while this portfolio uses React 18. This setting bypasses peer enforcement; it does not upgrade those dependencies.
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+## Deploy future updates
 
-### `npm run build`
+1. Make and review your changes locally.
+2. Verify the production build (PowerShell):
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+   ```powershell
+   $env:CI = 'true'
+   npm run build
+   Remove-Item Env:CI
+   ```
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+   Stop and fix any build failure before continuing. The output is generated in `build/`.
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+3. Review and commit only the intended source/configuration changes:
 
-### `npm run eject`
+   ```powershell
+   git status --short
+   git diff
+   git add <files-you-changed>
+   git commit -m "Describe the portfolio update"
+   git push origin master
+   ```
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+   Replace `<files-you-changed>` with actual paths. Do not commit dependencies, generated build output, or credentials.
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+4. Open the existing Netlify project and its **Deploys** page. With active builds, pushing to `master` starts a deployment automatically.
+5. Confirm the deployment corresponds to your latest commit and finishes successfully. If needed, use **Trigger deploy > Deploy site**.
+6. Open https://varshilshah.tech and check desktop/mobile layouts, theme toggle, navigation, animations, project links, resume download, and contact behavior.
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+## Netlify settings
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+Use the existing project connected to the custom domain rather than creating a duplicate.
 
-## Learn More
+| Setting | Value |
+| --- | --- |
+| Git provider | GitHub |
+| Repository | `varshil1/varshil1.github.io` |
+| Production branch | `master` |
+| Base directory | Leave blank (repository root) |
+| Package directory | Leave blank |
+| Build command | `npm run build` |
+| Publish directory | `build` |
+| Functions directory | Leave default `netlify/functions`; this app does not require functions |
+| Build status | Active builds |
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+The production branch is configured under **Continuous deployment > Branches and deploy contexts**, not in the build command or directory fields. UI labels may change.
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+No manual `NPM_FLAGS` environment variable is needed while the committed `.npmrc` is present. The runtime selector does not select the Git branch.
 
-### Code Splitting
+During the October 2026 troubleshooting session, Netlify selected Node 24.21.0/npm 11.19.0; local verification used Node 18.17.1/npm 9.6.7. These are recorded observations, not a recommendation to install the older local runtime. No Node version pin was added in these fixes.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+## Fixes performed during deployment setup
 
-### Analyzing the Bundle Size
+### 1. Repository checkout failed on a submodule
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+Error:
 
-### Making a Progressive Web App
+```text
+No url found for submodule path
+'node_modules/.cache/gh-pages/https!github.com!varshil1!portfolio.git'
+in .gitmodules
+```
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+The repository had generated dependencies tracked, including a nested Git repository in the gh-pages cache. Netlify interpreted that entry as a submodule and failed before installing packages.
 
-### Advanced Configuration
+Completed fix (commit `76218f95`):
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+- Added `.gitignore` rules for `node_modules/`, `build/`, local previews, environment files, and `.netlify/`.
+- Removed `node_modules/` and `build/` from Git tracking, keeping local files intact.
+- Committed and pushed the cleanup to `master`.
 
-### Deployment
+The one-time cleanup command was:
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+```powershell
+git rm -r --cached -- node_modules build
+```
 
-### `npm run build` fails to minify
+This is already done; do not repeat it as part of ordinary deployments. Netlify installs dependencies and generates the build itself.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+### 2. Dependency installation failed with ERESOLVE
+
+Error: `@material-ui/core@4.12.4` declares React 16/17 peers, but the project uses React 18.2.0.
+
+Completed fix (commit `c743cf46`): added the project `.npmrc`:
+
+```ini
+legacy-peer-deps=true
+```
+
+Verification performed:
+
+```powershell
+npm install --dry-run --ignore-scripts --no-audit --no-fund
+$env:CI = 'true'
+npm run build
+Remove-Item Env:CI
+```
+
+Dependency resolution and the local production build passed. The dry run checked resolution against the local installation; it was not a fresh Linux installation. Netlify's deploy log is the final check for its environment.
+
+Longer term, migrate or replace legacy React dependencies so this compatibility setting can be removed.
+
+### 3. GitHub authentication and repository redirect
+
+The old remote `https://github.com/varshil1/portfolio.git` redirected to `https://github.com/varshil1/varshil1.github.io.git`. Pushes succeeded through that redirect. To update an older clone to the canonical URL:
+
+```powershell
+git remote -v
+git remote set-url origin https://github.com/varshil1/varshil1.github.io.git
+```
+
+If authentication expires on Windows with Git Credential Manager installed:
+
+```powershell
+git credential-manager github login --username varshil1 --browser --force
+git push origin master
+```
+
+Finish the browser login before retrying the push. Never put access tokens in repository files or remote URLs.
+
+## Manual deployment fallback
+
+Run `npm run build`, then upload the **build folder** through the existing Netlify project's manual deploy area. Upload the compiled output, not `src/` or the whole repository. Prefer Git deployments for normal updates so deployment history follows commits.
+
+The package's `npm run deploy` script invokes the Netlify CLI, which requires separate installation and authentication. It is not required for the Git-based steps above.
+
+## References
+
+- [Netlify React setup](https://docs.netlify.com/build/frameworks/framework-setup-guides/react/)
+- [Netlify dependency troubleshooting](https://docs.netlify.com/build/configure-builds/troubleshooting-tips/)
+- [npm ci and project configuration](https://docs.npmjs.com/cli/v11/commands/npm-ci/)
