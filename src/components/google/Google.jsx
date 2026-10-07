@@ -1,14 +1,15 @@
+import { ThemeToggle } from "../../Theme";
 import "./google.scss";
 
-import { useHistory,useEffect, useRef } from "react";
+import { useEffect } from "react";
 import Typewriter from 'typewriter-effect/dist/core';
-import Anime, { anime } from 'react-anime';
+
 
 export default function Google() {
   
     useEffect(()=> {
         var input = document.getElementById('text_demo')
-        var butt = document.getElementById("press");
+        var butt = document.getElementById('press');
         
 var customNodeCreator = function(character) {
   // Add character to input placeholder
@@ -46,7 +47,7 @@ typewriter
   .typeString('Inquisitive data engineer who knows what to google ')
   .pauseFor(100)
   .deleteAll()
-  .pauseFor(10000000)
+  .pauseFor(200)
   .callFunction(() =>{
     NavBar.style=" transform: translateY(-100px); transition: ease 2s;";
     temp.style=" transform: translateX(-1000px); transition: ease 2s;    overflow: hidden;";
@@ -63,35 +64,36 @@ typewriter
 
   })
   .start();
+return () => typewriter.stop();
 
 } ,[]);
     return (
    <div className="bdy">
 
         <nav id="NavBar">
-        <a href="#">Gmail</a>
-        <a href="#">Images</a>
-        <img src="assets/img/g-menu.PNG"></img>
-        <button>Sign in</button>
+        <a href="mailto:varshilshah0203@gmail.com">Email</a>
+        <a href="https://github.com/varshil1" target="_blank" rel="noreferrer">GitHub</a>
+        <ThemeToggle />
+        <a href="#/intro">Skip intro →</a>
     </nav>
-    <section class="section-1">
-        <img src="assets/img/logo.png" class="logo" id="g-logo"/>
+    <section className="section-1">
+        <img alt="" src="assets/img/logo.png" className="logo" id="g-logo"/>
         <form action="/#/intro" id="ok"><br/><br/>
-            <div class="s-box">
+            <div className="s-box">
               <div id="temp1">
-                <img src="assets/img/search.svg" class="search-icon"/>
-                <textarea type="text" placeholder="What are you looking for ?" class="s-input" id="text_demo"/>
-                <img src="assets/img/vs.png" class="vs-icon"></img>
+                <img alt="" src="assets/img/search.svg" className="search-icon"/>
+                <textarea aria-label="Portfolio introduction" readOnly placeholder="What are you looking for ?" className="s-input" id="text_demo"/>
+                <img alt="" src="assets/img/vs.png" className="vs-icon"></img>
                 </div>
                 <div id="temp2">
-                <input type="submit" id="press" class="s-btn" value="Google Search"/>
-                <input type="submit" class="s-btn" value="I'm Feeling Lucky"/>
+                <input type="submit" id="press" className="s-btn" value="Google Search"/>
+                <input type="submit" className="s-btn" value="I'm Feeling Lucky"/>
                 </div>
             </div>
         </form>
-        <div class="lang" id="temp3">
+        <div className="lang" id="temp3">
             Available for hire in:
-            <a href="#">United States</a>
+            <span>United States</span>
         </div>
     </section>
     
@@ -100,3 +102,4 @@ typewriter
 
    
 }
+

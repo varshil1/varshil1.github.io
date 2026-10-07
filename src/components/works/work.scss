@@ -1,233 +1,67 @@
-@import "../../global.scss";
-$color: #000;
-$stroke-width: 3px;
-$size: 102px;
-
-.work{
-    background-color: crimson;
-    background-image: linear-gradient(90deg, rgba(34, 193, 195, 1) 0%, rgba(253, 187, 45, 1) 100%);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    position: relative;
-    
-.Heading{
-	display: block;
-    margin-left: auto;
-    margin-right: auto;
-	color: #fff;
-	z-index: 2;    
-    margin-top: calc(-625px + 5%);
-	h1{
-		text-align: center;
-		justify-content: center;
-		font-size: 55px;
-	}
-	h2{
-		font-size: 40px;
-	}
+.app .sections > .work {
+  height: auto;
+  min-height: calc(100svh - 70px);
+  padding: clamp(48px, 7vw, 100px) clamp(20px, 6vw, 100px);
+  box-sizing: border-box;
+  background: var(--page-bg);
+  color: var(--text-primary);
 }
-.topContainer{
-    display: flex;
-    justify-content: space-between;
-    align-items: center; 
+.work {
+  * { box-sizing: border-box; overflow: visible; }
+  .experience-heading { max-width: 1120px; margin: 0 auto 56px; }
+  .section-eyebrow { color: var(--accent); font-size: 12px; letter-spacing: 0.2em; font-weight: 600; margin-bottom: 14px; }
+  h1 { font-size: clamp(32px, 4vw, 56px); line-height: 1.15; letter-spacing: -0.035em; margin-bottom: 16px; }
+  h1 span { color: var(--accent); }
+  .experience-heading > p:last-child { color: var(--text-muted); font-size: 18px; }
+  .experience-timeline { max-width: 1120px; margin: auto; }
+  .experience-entry { display: grid; grid-template-columns: 190px minmax(0, 1fr); gap: 40px; padding-bottom: 36px; }
+  .experience-date { display: flex; flex-direction: column; gap: 14px; font-size: 14px; line-height: 1.6; color: var(--text-muted); padding-top: 24px; }
+  .experience-number { color: var(--accent); font-size: 13px; letter-spacing: 0.1em; }
+  .experience-card { position: relative; background: var(--surface); border: 1px solid var(--border); border-radius: 16px; padding: clamp(24px, 3vw, 40px); }
+  .experience-card::before { content: ''; position: absolute; width: 7px; height: 7px; border-radius: 50%; background: var(--accent); top: 31px; left: -25px; box-shadow: 0 0 0 6px var(--page-bg); }
+  .experience-card::after { content: ''; position: absolute; left: -22px; top: 44px; bottom: -58px; width: 1px; background: var(--border); }
+  .experience-entry:last-child .experience-card::after { display: none; }
+  .experience-card header { display: flex; gap: 18px; align-items: center; margin-bottom: 24px; }
+  .experience-card header img { width: 56px; height: 56px; object-fit: contain; background: #fff; padding: 6px; border-radius: 10px; flex-shrink: 0; }
+  .experience-company { color: var(--accent); font-size: 13px; margin-bottom: 6px; }
+  h2 { font-size: clamp(19px, 2vw, 25px); font-weight: 500; line-height: 1.35; }
+  .experience-card ul { padding-left: 20px; color: var(--text-muted); font-size: 16px; line-height: 1.75; }
+  .experience-card li { padding-left: 5px; margin-bottom: 12px; }
+  .experience-card li::marker { color: var(--accent); }
+  .experience-card li:last-child { margin-bottom: 0; }
+  .experience-collaboration { display: flex; gap: 16px; align-items: center; flex-wrap: wrap; margin-top: 24px; font-size: 13px; color: var(--text-muted); }
+  .experience-collaboration img { width: 60px; height: 40px; object-fit: contain; background: #fff; border-radius: 4px; }
 }
-    #side_img{
-        position: absolute;
-        z-index: 2;
-        top: 50%;
-        // left: 0%;
-        overflow: hidden;
-        height: 50%;
-        width: 40%;
-        
-        transition: all 1s ease-out;
-    }
-    .arrow{
-        height: 50px;
-        position: absolute;
-        cursor: pointer;
-
-        @include mobile{
-            display: none;
-        }
-        &.left{
-            left: 100px;
-            transform: rotateY(180deg);
-
-        }
-
-        &.right{
-            right: 100px;
-            
-        }
-    }
-.anicca{
-    height: 70px !important;
-    width: 100px !important;
+@media (max-width: 700px) {
+  .work .experience-entry { grid-template-columns: minmax(0, 1fr); gap: 12px; }
+  .work .experience-date { flex-direction: row; padding-top: 0; }
+  .work .experience-card::before, .work .experience-card::after { display: none; }
+  .work .experience-heading { margin-bottom: 32px; }
 }
-    .slider{
-        height: 400px;
-        display: flex;
-        position: absolute;
-        left:0;
-        transition: all 1s ease-out;
+.work .career-layout { max-width: 1200px; margin: auto; display: grid; grid-template-columns: 280px minmax(0,1fr); gap: 48px; align-items: start; }
+.work .career-map { position: sticky; top: 24px; padding: 24px 18px; background: var(--surface); border: 1px solid var(--border); border-radius: 18px; }
+.career-map > p { font: 11px monospace; color: var(--accent); letter-spacing: .14em; margin-bottom: 22px; }
+.career-stops { display: grid; gap: 8px; position: relative; }
+.career-stops button { position: relative; display: flex; align-items: center; gap: 10px; width: 100%; text-align: left; border: 1px solid transparent; background: transparent; border-radius: 9px; padding: 9px 6px; color: var(--text-muted); cursor: pointer; transition: background .3s,color .3s; }
+.career-stops button > span { font: 10px monospace; color: var(--accent); }
+.career-stops button > div { flex: 1; }
+.career-stops strong { display: block; font-size: 12px; font-weight: 500; }
+.career-stops small { display: block; font-size: 10px; line-height: 1.5; margin-top: 4px; }
+.career-stops b { opacity: 0; color: var(--accent); transition: opacity .3s; }
+.career-stops button[aria-current] { background: var(--surface-raised); border-color: var(--border); color: var(--text-primary); }
+.career-stops button[aria-current] b { opacity: 1; }
+.career-stops button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.career-map-footer { font: 11px/1.9 monospace; color: var(--accent); border-top: 1px solid var(--border); margin-top: 18px; padding-top: 16px; }
+.career-map-footer span { color: var(--text-muted); font-size: 10px; }
+.career-track { position: absolute; left: 0; top: 60px; bottom: 100px; width: 2px; background: var(--border); }
+.career-track > span { display: block; width: 100%; background: var(--accent); transition: height .5s ease; }
+.work .experience-entry { display: block; scroll-margin-top: 24px; padding-bottom: 40px; }
+.work .experience-date { flex-direction: row; flex-wrap: wrap; padding: 0 0 14px; gap: 8px 16px; font-size: 12px; }
+.work .experience-card { transition: border-color .5s,transform .5s,box-shadow .5s; transform: translateY(8px); }
+.work .experience-entry.is-active .experience-card { border-color: var(--accent); transform: translateY(0); box-shadow: 0 12px 32px #00000012; }
+.work .experience-card::before,.work .experience-card::after { display: none; }
+@media(max-width:950px),(max-height:720px) { .work .career-layout { grid-template-columns: minmax(0,1fr); } .work .career-map { display: none; } .work .experience-card { transform: none; } }
+@media(prefers-reduced-motion:reduce) { .work .experience-card,.career-track > span,.career-stops button,.career-stops b { transition: none; transform: none; } }
 
-        @include mobile{
-            height: 100vh;
-            flex-direction: column;
-            justify-content: center;
-
-        }
-        .container{
-            width: 100vw;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-
-            .item{
-                width: 70%;
-                height: 100%;
-                background-color: white;
-                border-radius: 20px;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-
-        @include mobile{
-            width: 80%;
-            height: 150px;
-            margin: 15px 0;
-        }
-        
-                .right{
-                    flex:20;
-                    height: 95%;
-                    display: flex;
-                    align-items: center;
-                    justify-content: center;
-
-                    
-                    .leftContainer{
-                        width: 90%;
-                        height: 90%;
-                        display: flex;
-                        flex-direction: column;
-                        justify-content: space-between;
-
-                        @include mobile{
-                            width: 100%;
-                            height: 100%;
-                        }
-                        .dateExp{
-                            display: flex;
-                            /* justify-content: center; */
-                            align-items: center;
-                            font-size: 18px;
-                        }
-                        .imgContainer{
-                            width: 50px;
-                            height: 50px;
-                            border-radius: 50%;
-                            background-color: rgb(245, 179, 155);
-                            display: flex;
-                            align-items: center;
-                            justify-content: center;
-
-                            @include mobile{
-                                width: 20px;
-                                height: 20px;
-                            }
-                            img{
-                                width: 35px;
-                                @include mobile{
-                                    width: 15px;
-                                }
-
-                            }
-                        }
-                        h3{
-                            img{
-                                width: 50px;
-                                height: 50px;
-                            }
-
-                            .hello{
-                                width: 150px;
-                                height: 40px;
-                            }
-
-                            .hello2{
-                                width: 100px;
-                                height: 50px;
-                            }
-                        }
-                        h2{
-                            font-size: 20px;
-
-                            @include mobile{
-                                font-size: 13px;
-                            }
-                        }
-                        p{
-                            font-size: 18px;
-
-                            
-                            @include mobile{
-                                display: none;
-                            }
-                        }
-                        span{
-                            font-size: 12px;
-                            font-weight: 600;
-
-                            @include mobile{
-                                font-size: 9px;
-                            }
-                        }
-
-                        h4{
-                            font-size: 12px;
-                            font-weight: 600;
-                            flex-direction: row;
-                            
-                            
-                            
-                            img{
-
-                                width: 70px;
-                                height: 70px;
-                                // padding-left: 15px;
-                            }
-                            
-
-                            #inactive{
-                                img{
-                                    display: none;
-                                }
-                            }
-                        }
-                        
-                    }
-                }
-                .anicca2{
-            
-                    flex:20;
-                }
-                .left{
-                    flex:8;
-                    height: 100%;
-                    display: flex;
-                    align-items: center;
-                    justify-content: center;
-                    overflow: hidden;
-
-                    img{
-                        width: 400px;
-                        // transform: rotate(-10deg);
-                    }
-                }
-            }
-        }
-    }
-}
+.work .career-map { display: block; }
+@media(max-width:950px),(max-height:720px) { .work .career-map { display: none; } }

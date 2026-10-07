@@ -1,138 +1,17 @@
-import "./edu.scss"
-
-import { ReactComponent as WorkIcon } from "./work.svg";
-import { ReactComponent as SchoolIcon } from "./school.svg";
-
-import { useEffect, useRef } from "react"
-import AOS from 'aos';
-import 'aos/dist/aos.css'; // You can also use <link> for styles
-
-import {LocationCity,DateRange} from "@material-ui/icons"
-import {
-    VerticalTimeline,
-    VerticalTimelineElement,
-  } from "react-vertical-timeline-component";
-  
-  import "react-vertical-timeline-component/style.min.css";
-
-export default function Works() {
-
-  useEffect(() => {
-    
-     setTimeout(function () { 
-         
-        AOS.init({delay: 2, // values from 0 to 3000, with step 50ms
-        duration: 1000, // values from 0 to 3000, with step 50ms
-        easing: 'ease', // default easing for AOS animations
-        }); 
-    
-    }, 7000);
-
-     
-}, []);
-
-
-    let workIconStyles = { background: "#06D6A0" };
-  let schoolIconStyles = { background: "#f9c74f" };
-
-    const timelineElements = [
-        
-        // {
-        //   id: 1,
-        //   title: "Secondary Education",
-        //   location: "N.R. Secondary School,Ahmedabad,India",
-        //   description:
-        //     "Secondary Education, Gujarat Board: 90 % ,99.18 Percentile",
-        //   date: "Mar 2016",
-        //   icon: "school",
-        // },
-        // {
-        //   id: 2,
-        //   title: "Higher Secondary Education",
-        //   location: "M.K. Higher Secondary School,Ahmedabad,India",
-        //   description:
-        //     "Higher Secondary Education, Gujarat Board: 91 % ,98.79 Percentile",
-        //   date: "Mar 2016 - April 2018",
-        //   icon: "school",
-        // },
-        
-        {
-          id: 1,
-          title: "Bachelors in Information and Communication Technology",
-          location: "Ahmedabad University, Gujarat ,India",
-          description:
-            "Information and Communication Technology CGPA: 3.21/4.0",
-          date: "June 2018 - May 2022",
-          icon: "school",
-        },{
-          id: 2,
-          title: "Masters of Computer Science (MCS)",
-          location: "Arizona State University,Tempe,Arizona",
-          description:
-            "",
-          date: "August 2023 - May 2025 Expected",
-          icon: "school",
-        }
-      ];
-      
-    return (
-        <div className="edu" id="edu">
-          <div class="bg"></div>
-<div class="bg bg2"></div>
-<div class="bg bg3"></div>
-<div class="Heading">
-                <h1>
-                    Education
-                </h1>
-                
-            </div>
-          {/* <img src="assets/book_lover.svg" alt="" class="book"/> */}
-      <VerticalTimeline lineColor="#000">
-        {timelineElements.map((element) => {
-          let isWorkIcon = element.icon === "work";
-          let showButton =
-            element.buttonText !== undefined &&
-            element.buttonText !== null &&
-            element.buttonText !== "";
-
-          return (
-
-
-            <VerticalTimelineElement  
-
-            data-aos="fade-in" data-aos-delay="3000" data-aos-duration="3000"
-              key={element.key}
-              date={element.date}
-              dateClassName="date"
-              iconStyle={isWorkIcon ? workIconStyles : schoolIconStyles}
-              icon={isWorkIcon ? <WorkIcon /> : <SchoolIcon />}
-            >
-              <h3 className="vertical-timeline-element-title">
-                {element.title}
-              </h3>
-              <h5 className="vertical-timeline-element-subtitle">
-              <LocationCity/>{element.location}
-              </h5>
-              <h5 className="vertical-timeline-element-subtitle">
-              <DateRange/>{element.date}
-              </h5>
-              <p id="description">{element.description}</p>
-              {showButton && (
-                <a
-                  className={`button ${
-                    isWorkIcon ? "workButton" : "schoolButton"
-                  }`}
-                  href="/"
-                >
-                  {element.buttonText}
-                </a>
-              )}
-            </VerticalTimelineElement>
-            
-          );
-        })}
-      </VerticalTimeline>
-    </div>
-  
-            )
+import './edu.scss';
+const degrees = [
+ {chapter:'01',level:'UNDERGRADUATE',school:'Ahmedabad University',degree:'B.Tech. in Information and Communication Technology',place:'Gujarat, India',dates:'June 2018 — May 2022',gpa:'3.21',label:'Building the foundation.',symbol:'ICT'},
+ {chapter:'02',level:'GRADUATE',school:'Arizona State University',degree:'Master of Computer Science',place:'Tempe, Arizona',dates:'August 2023 — May 2025',gpa:'3.97',label:'Taking the next step.',symbol:'MCS'}
+];
+export default function Education() {
+ return <section className="edu education-stack" id="edu" tabIndex={0} aria-labelledby="education-heading">
+  <header className="education-heading"><div><p className="education-eyebrow">EDUCATION / 2018 — 2025</p><h1 id="education-heading">Two chapters.<br/><span>One curious mind.</span></h1></div><p className="education-scroll-hint">From information technology to computer science.<br/><span>Scroll through the journey ↓</span></p></header>
+  <div className="education-deck">{degrees.map((item,index)=><article className={`education-card education-card-${index}`} key={item.chapter}>
+   <div className="education-card-bar"><span>{item.level}</span><span>CHAPTER {item.chapter} / 02</span></div>
+   <div className="education-card-body"><div className="education-copy"><p className="education-school">{item.school}</p><h2>{item.degree}</h2><p className="education-location">{item.place}</p><div className="education-facts"><div><span>STUDIED</span><strong>{item.dates}</strong></div><div><span>GPA</span><strong>{item.gpa}<small> / 4.00</small></strong></div></div></div>
+   <div className="education-art" aria-hidden="true"><svg viewBox="0 0 280 200" fill="none"><path d="m140 25 110 58-110 59L30 83Z" stroke="currentColor" strokeWidth="2"/><path d="M65 104v47q75 55 150 0v-47M250 83v77" stroke="currentColor" strokeWidth="2"/><circle cx="250" cy="166" r="6" fill="currentColor"/><path d="M40 179h200M140 25v117" stroke="currentColor" strokeOpacity=".25"/></svg><span>{item.symbol}</span></div></div>
+   <footer><span>{item.label}</span><span>{item.chapter}</span></footer>
+  </article>)}</div>
+ </section>;
 }
+

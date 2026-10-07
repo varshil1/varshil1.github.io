@@ -1,0 +1,60 @@
+.systems .workflow-studio { border: 1px solid var(--border); border-radius: 16px; overflow: hidden; background: var(--surface); }
+.studio-top { padding: 16px 22px; display: flex; align-items: center; justify-content: space-between; gap: 16px; border-bottom: 1px solid var(--border); }
+.systems .studio-top h3 { font-size: 19px; margin: 5px 0 0; }
+.studio-demo,.studio-label { font: 9px/1.6 monospace; color: var(--text-muted); letter-spacing: .08em; }
+.studio-body { display: grid; grid-template-columns: 220px minmax(0,1fr); }
+.studio-sidebar { background: var(--page-bg); padding: 20px; display: flex; flex-direction: column; gap: 10px; border-right: 1px solid var(--border); }
+.studio-sidebar > strong { font-size: 15px; font-weight: 500; }
+.studio-chip { font: 10px monospace; color: var(--accent); padding: 8px; background: var(--surface-raised); border-radius: 5px; }
+.studio-request { border-top: 1px solid var(--border); padding-top: 12px; margin-top: 4px; }
+.systems .studio-request p { font-size: 12px; line-height: 1.6; color: var(--text-primary); margin-top: 6px; }
+.studio-source { display: grid; gap: 7px; color: var(--text-muted); font: 10px monospace; }
+.studio-canvas { padding: 20px; min-width: 0; background-image: radial-gradient(var(--border) .7px,transparent .7px); background-size: 16px 16px; }
+.studio-canvas-heading { display: flex; justify-content: space-between; gap: 10px; font: 9px monospace; color: var(--text-muted); }
+.studio-indicator { color: var(--accent); }
+.studio-flow { display: grid; grid-template-columns: repeat(5,minmax(0,1fr)); gap: 14px; padding: 0; margin: 22px 0; list-style: none; }
+.studio-flow li { position: relative; min-width: 0; padding: 12px 8px; background: var(--surface); border: 1px solid var(--border); border-radius: 9px; transition: border-color .4s,box-shadow .4s; }
+.studio-flow li:not(:last-child)::after { content: ''; position: absolute; width: 15px; height: 2px; right: -15px; top: 50%; background: var(--border); }
+.studio-flow li.complete::after { background: var(--accent); }
+.studio-node-icon { display: block; font: 20px monospace; color: var(--accent); margin-bottom: 8px; }
+.studio-flow strong { display: block; font-size: 11px; font-weight: 500; }
+.studio-flow small { display: block; margin-top: 6px; font: 8px monospace; color: var(--text-muted); }
+.studio-flow .active { border-color: var(--accent); box-shadow: 0 0 20px color-mix(in srgb,var(--accent) 12%,transparent); }
+.is-running .studio-flow .active .studio-node-icon { animation: studio-breathe 1.3s ease-in-out infinite; }
+.studio-bottom { display: grid; grid-template-columns: 1.2fr 1fr; gap: 12px; }
+.studio-inspector,.studio-artifact { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 14px; min-width: 0; }
+.studio-inspector h4 { font-size: 14px; font-weight: 500; margin: 7px 0; }
+.systems .studio-inspector p { font-size: 12px; line-height: 1.6; }
+.studio-artifact code { display: block; font: 10px/1.5 monospace; color: var(--accent); overflow-wrap: anywhere; margin: 10px 0; }
+.studio-bars { display: grid; gap: 5px; margin: 10px 0; }
+.studio-bars i { height: 3px; background: var(--border); border-radius: 4px; }
+.studio-bars i:nth-child(2) { width: 80%; }.studio-bars i:last-child { width: 55%; }
+@keyframes studio-breathe { 50% { opacity: .45; transform: translateY(-2px); } }
+@media(max-width:900px) { .studio-body { grid-template-columns: 1fr; }.studio-sidebar { border-right: 0; border-bottom: 1px solid var(--border); }.studio-source { grid-template-columns: repeat(3,minmax(0,1fr)); }.studio-top { flex-wrap: wrap; } }
+@media(max-width:550px) { .studio-flow { grid-template-columns: repeat(3,minmax(0,1fr)); gap: 10px; }.studio-flow li::after { display: none; }.studio-bottom { grid-template-columns: 1fr; }.studio-source { grid-template-columns: 1fr; }.studio-canvas-heading { flex-wrap: wrap; } }
+@media(prefers-reduced-motion:reduce) { .workflow-studio * { animation: none !important; transition: none !important; } }
+/* A connected automation canvas, with explicit routing branches. */
+.studio-body { grid-template-columns: 180px minmax(0,1fr); }
+.studio-sidebar { padding: 16px; }
+.studio-canvas { padding: 16px; }
+.workflow-map-scroll { width: 100%; overflow-x: auto; overscroll-behavior-x: contain; margin: 12px 0; border-radius: 8px; }
+.workflow-map { width: 100%; min-width: 740px; display: block; overflow: visible; }
+.workflow-edge { color: var(--text-muted); }
+.workflow-edge > path { fill: none; stroke: var(--border); stroke-width: 1.8; }
+.workflow-edge.traced > path { stroke: var(--accent); }
+.workflow-edge .workflow-packet { stroke: var(--accent); stroke-width: 3; stroke-dasharray: 4 12; animation: workflow-travel 1s linear infinite; animation-play-state: paused; }
+.is-running .workflow-edge .workflow-packet { animation-play-state: running; }
+.workflow-node { --node-color: var(--accent); }
+.workflow-node.tone-blue { --node-color: #6ba4e8; }.workflow-node.tone-purple { --node-color: #aa87ec; }.workflow-node.tone-rose { --node-color: #d786a0; }.workflow-node.tone-amber { --node-color: #c99a50; }
+.workflow-node > rect { fill: var(--surface); stroke: var(--border); stroke-width: 1; }
+.workflow-node.current > rect { stroke: var(--node-color); stroke-width: 2; filter: drop-shadow(0 0 4px color-mix(in srgb,var(--node-color) 25%,transparent)); }
+.workflow-port { fill: var(--surface-raised); stroke: var(--node-color); }
+.workflow-icon { fill: var(--node-color); font: 16px monospace; }
+.workflow-kind { fill: var(--text-muted); font: 7px monospace; letter-spacing: .6px; }
+.workflow-node-title { fill: var(--text-primary); font-size: 11px; font-weight: 500; }
+.workflow-node-sub { fill: var(--text-muted); font-size: 8px; }
+.workflow-branch-label { fill: var(--text-muted); font: 8px monospace; letter-spacing: .5px; }
+.workflow-map-scroll:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+@keyframes workflow-travel { to { stroke-dashoffset: -32; } }
+@media(max-width:1100px) { .studio-body { grid-template-columns: 1fr; }.studio-sidebar { border-right: 0; border-bottom: 1px solid var(--border); }.studio-source { display: none; }.studio-request { margin-top: 0; }.workflow-map { min-width: 740px; } }
+@media(prefers-reduced-motion:reduce) { .workflow-edge .workflow-packet { animation: none; } }

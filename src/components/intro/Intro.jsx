@@ -1,314 +1,149 @@
-import "./intro.scss"
-import { init } from "ityped"
-import { useEffect, useRef } from "react"
-import AOS from 'aos';
-import 'aos/dist/aos.css'; // You can also use <link> for styles
-import React, { useState } from 'react';
+import "./intro.scss";
+import { useEffect, useRef, useState } from "react";
+import AOS from "aos";
+import "aos/dist/aos.css";
+
+const concepts = [ { name: 'LLMs', label: 'Reason with context', detail: 'Focused prompts, structured outputs, and model evaluation.' }, { name: 'RAG', label: 'Ground every answer', detail: 'Retrieval connects model responses to relevant evidence.' }, { name: 'MCP', label: 'Connect the tools', detail: 'A shared interface between AI applications and external capabilities.' }, { name: 'Agents', label: 'Coordinate the workflow', detail: 'Bounded tasks, explicit contracts, and human review.' } ];
+
+const roles = ["An AI Engineer", "A Data Systems Builder", "A Creative Problem Solver"];
 
 export default function Intro() {
+  const [concept, setConcept] = useState(0);
+  const [effect, setEffect] = useState(null);
+  const [typedRole, setTypedRole] = useState("");
+  const [decodedCode, setDecodedCode] = useState("code");
+  const canvasRef = useRef(null);
+  const artRef = useRef(null);
 
-    const [isHovered, setIsHovered] = useState(false);
-    
-    const handleMouseEnter = () => {
-      setIsHovered(true);
-    };
-    
-    const handleMouseLeave = () => {
-      setIsHovered(false);
-    };
-    
-    const textRef = useRef();
-    
-    
-    const name3DRef = useRef();
-    
-    // NEW ADDDDDDDDD
-    const leftRef = useRef();
-
-    const handleCodeMouseEnter = () => {
-      addCanvas();
-      toggleShapesVisibility(true);
-    };
-  
-    const handleCodeMouseLeave = () => {
-      removeCanvas();
-      toggleShapesVisibility(false);
-
-    };
-
-    const toggleShapesVisibility = (isVisible) => {
-      const shapes = document.querySelectorAll('#shape-1, #shape-2, #shape-3');
-      shapes.forEach(shape => {
-          if (isVisible) {
-              shape.classList.add('hidden-shapes');
-          } else {
-              shape.classList.remove('hidden-shapes');
-          }
-      });
-  };
-
-    const addCanvas = () => {
-      const canvas = document.createElement("canvas");
-      canvas.className = "canvas-bg";
-      const backWrapper = document.querySelector(".backWrapper"); // Reference to the backWrapper element
-      backWrapper.appendChild(canvas);
-      const context = canvas.getContext("2d");
-      context.globalCompositeOperation = 'lighter';
-      canvas.width = backWrapper.clientWidth;
-      canvas.height = backWrapper.clientHeight;
-    
-      // var textStrip = ['诶', '比', '西', '迪', '伊', '吉', '艾', '杰', '开', '哦', '屁', '提', '维'];
-      var textStrip = ['0', '1','2','3','4','5','6','7','8','9'];
-      var stripCount = 60, stripX = new Array(), stripY = new Array(), dY = new Array(), stripFontSize = new Array();
-      for (var i = 0; i < stripCount; i++) {
-        stripX[i] = Math.floor(Math.random() * canvas.width);
-        stripY[i] = -100;
-        dY[i] = Math.floor(Math.random() * 7) + 3;
-        stripFontSize[i] = Math.floor(Math.random() * 16) + 8;
+  useEffect(() => {
+    AOS.init({ duration: 1000, once: true });
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      setTypedRole(roles[0]);
+      return;
+    }
+    let roleIndex = 0;
+    let character = 0;
+    let deleting = false;
+    let timer;
+    const type = () => {
+      const current = roles[roleIndex];
+      character += deleting ? -1 : 1;
+      setTypedRole(current.slice(0, character));
+      let delay = deleting ? 60 : 90;
+      if (!deleting && character === current.length) {
+        deleting = true;
+        delay = 1500;
+      } else if (deleting && character === 0) {
+        deleting = false;
+        roleIndex = (roleIndex + 1) % roles.length;
+        delay = 300;
       }
-    
-      var theColors = ['#cefbe4', '#81ec72', '#5cd646', '#54d13c', '#4ccc32', '#43c728'];
-    
-      function drawStrip(x, y) {
-        for (var k = 0; k <= 20; k++) {
-          var randChar = textStrip[Math.floor(Math.random() * textStrip.length)];
-          if (context.fillText) {
-            context.fillStyle = theColors[Math.floor(k / 4)]; // Simplified color selection
-            context.fillText(randChar, x, y);
-          }
-          y -= stripFontSize[k];
-        }
-      }
-    
-      function draw() {
-        context.clearRect(0, 0, canvas.width, canvas.height);
-        context.shadowOffsetX = context.shadowOffsetY = 0;
-        context.shadowBlur = 8;
-        context.shadowColor = '#94f475';
-    
-        for (var j = 0; j < stripCount; j++) {
-          context.font = stripFontSize[j] + 'px MatrixCode';
-          context.textBaseline = 'top';
-          context.textAlign = 'center';
-    
-          if (stripY[j] > canvas.height) {
-            stripX[j] = Math.floor(Math.random() * canvas.width);
-            stripY[j] = -100;
-            dY[j] = Math.floor(Math.random() * 7) + 3;
-            stripFontSize[j] = Math.floor(Math.random() * 16) + 8;
-          } 
-          drawStrip(stripX[j], stripY[j]);
-          stripY[j] += dY[j];
-        }
-        requestAnimationFrame(draw);
-      }
-      draw();
+      timer = window.setTimeout(type, delay);
     };
-    
-    const removeCanvas = () => {
-      const backWrapper = document.querySelector(".backWrapper"); // Reference to the backWrapper element
-      const canvas = backWrapper.querySelector(".canvas-bg");
-      if (canvas) {
-        backWrapper.removeChild(canvas);
-      }
+    timer = window.setTimeout(type, 300);
+    return () => window.clearTimeout(timer);
+  }, []);
+
+  useEffect(() => {
+    if (effect !== "code" || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    const canvas = canvasRef.current;
+    const context = canvas.getContext("2d");
+    let columns = [];
+    let frame;
+    let lastTime = 0;
+    const resize = () => {
+      canvas.width = artRef.current.clientWidth;
+      canvas.height = artRef.current.clientHeight;
+      columns = Array.from({ length: Math.ceil(canvas.width / 20) }, () => Math.random() * -50);
     };
-    
-    
-    // END ADDDDDDDDDDDD
-
-
-
-    useEffect(() => {
-        init(textRef.current, { showCursor: false,
-            backDelay: 1500,
-            showCursor: true,
-            backSpeed:60, 
-            strings: ['An Creative Software Developer','A Data Engineer' ,'An AI ENTHUSIAST'],
-         })
-         setTimeout(function () { 
-             
-            AOS.init({delay: 2, // values from 0 to 3000, with step 50ms
-            duration: 1000, // values from 0 to 3000, with step 50ms
-            easing: 'ease', // default easing for AOS animations
-            }); 
-        
-        }, 7000);
-
-
-        // NEWWWWWWWWWWWWWWWWWWWWWWWWWWWW
-
-        // 3D text shadow effect
-        const handle3dMouseMove = (e) => {
-          const tspanElement = name3DRef.current;
-          if (tspanElement) {
-              const rect = tspanElement.getBoundingClientRect();
-              const rXP = (e.clientX - rect.left - tspanElement.clientWidth / 2);
-              const rYP = (e.clientY - rect.top - tspanElement.clientHeight / 2);
-              tspanElement.style.textShadow =
-                  `${rYP / 10}px ${rXP / 80}px rgba(227,6,19,.8), 
-                   ${rYP / 8}px ${rXP / 60}px rgba(255,237,0,1), 
-                   ${rXP / 70}px ${rYP / 12}px rgba(0,159,227,.7)`;
-          }
-      };
-
-      const handle3dMouseEnter = () => {
-          const wrapperElement = document.querySelector('.logo-name');
-          if (wrapperElement) {
-              wrapperElement.addEventListener("mousemove", handle3dMouseMove);
-          }
-      };
-
-      const handle3dMouseLeave = () => {
-          const wrapperElement = document.querySelector('.logo-name');
-          if (wrapperElement) {
-              wrapperElement.removeEventListener("mousemove", handle3dMouseMove);
-          }
-          if (name3DRef.current) {
-              name3DRef.current.style.textShadow = '';
-          }
-      };
-
-      // Attach event listeners to the .right .wrapper element
-      const wrapperElement = document.querySelector('.logo-name');
-      if (wrapperElement) {
-          wrapperElement.addEventListener("mouseenter", handle3dMouseEnter);
-          wrapperElement.addEventListener("mouseleave", handle3dMouseLeave);
+    const observer = new ResizeObserver(resize);
+    observer.observe(artRef.current);
+    resize();
+    const draw = time => {
+      if (time - lastTime > 50) {
+        context.fillStyle = "rgba(4, 4, 41, 0.15)";
+        context.fillRect(0, 0, canvas.width, canvas.height);
+        context.fillStyle = "#81ec72";
+        context.font = "16px monospace";
+        columns.forEach((y, index) => {
+          context.fillText(Math.random() > 0.5 ? "1" : "0", index * 20, y * 20);
+          columns[index] = y * 20 > canvas.height && Math.random() > 0.97 ? 0 : y + 1;
+        });
+        lastTime = time;
       }
+      frame = requestAnimationFrame(draw);
+    };
+    frame = requestAnimationFrame(draw);
+    return () => { cancelAnimationFrame(frame); observer.disconnect(); };
+  }, [effect]);
 
-      // Cleanup event listeners on component unmount
-      return () => {
-          if (wrapperElement) {
-              wrapperElement.removeEventListener("mouseenter", handle3dMouseEnter);
-              wrapperElement.removeEventListener("mouseleave", handle3dMouseLeave);
-              wrapperElement.removeEventListener("mousemove", handle3dMouseMove);
-          }
-      };
-        // END NEWWWWWWWWWWWWWWWWWWWWWW
-         
-    }, []);
+  useEffect(() => {
+    setDecodedCode("code");
+    if (effect !== "code" || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    const frames = ["c···", "co··", "cod·", "code"];
+    let index = 0;
+    setDecodedCode(frames[0]);
+    const timer = window.setInterval(() => {
+      index += 1;
+      setDecodedCode(frames[index]);
+      if (index === frames.length - 1) window.clearInterval(timer);
+    }, 140);
+    return () => window.clearInterval(timer);
+  }, [effect]);
+  const interaction = name => ({
+    onMouseEnter: event => { if (event.buttons === 0) setEffect(name); },
+    onMouseLeave: () => setEffect(null),
+    onFocus: () => setEffect(name),
+    onBlur: () => setEffect(null),
+    onClick: () => setEffect(name),
+  });
 
-    return (
-        <div className="intro" id="intro">
-            <ul class='circles'>
-         <li></li>
-   <li></li>
-   <li></li>
-   <li></li>
-   <li></li>
-   <li></li>
-   <li></li>
-   <li></li>
-   <li></li>
-   <li></li>
-   
-</ul>
-            <div className="left" >
-            <div className="imgContainer" >
-            <div className="backWrapper" ref={leftRef}>
-                
-            <div
-           id="shape-1"
-           class="
-                  rounded-circle
-                  position-absolute
-                  opacity-70
-                  scale-up-center
-                  d-none d-md-block
-                  "
-           ></div>
-      <div
-           id="shape-2"
-           class="
-                  rounded-circle
-                  position-absolute
-                  opacity-70
-                  scale-up-center
-                  fade-delay-2000
-                  d-none d-md-block
-                  "
-           ></div>
-      <div
-           id="shape-3"
-           class="
-                  rounded-circle
-                  position-absolute
-                  opacity-70
-                  scale-up-center
-                  fade-delay-4000
-                  d-none d-md-block
-                  "
-           ></div>
-      <div
-           id="shape-4-ai" className={`shape-4-ai ${isHovered ? 'hovered' : ''}`}
-           >
-            <img src="assets/aiMotion2.gif"></img>
-           </div>
-           
-           </div>
-                <img src="assets/man_illustrator_wwithout_eyes.png" />
-            </div>
-            </div>
-            <div className="right">
-                <div className="wrapper">
-                    <h2>
-                          Hey There, I'm
-                    </h2>
-                    <div className="logo-name">
-  <svg class="text" viewBox="0 0 850 125">
-    <text
-          fill="none"
-          stroke="#FFF"
-          transform="translate(3 102)"
-          stroke-width="3"
-          font-size="102"
-          font-family= "'Outfit', sans-serif"
-          font-weight="600"
-          letter-spacing="0.025em"
-          class="is-active">
-      <tspan ref={name3DRef} className="name_3d" 
->Varshil Shah</tspan>
-    </text>
-  </svg>
-</div>
-                    <h3><span ref={textRef}></span></h3>
-                    <div class="back" data-aos="zoom-in-left" data-aos-delay="5000" data-aos-duration="3000" alt="">
-                    <h1 class="ido">I 
-
-                    <button class="btn">
-<span class="btn-paint"></span>
-<span class="btn-paint"></span>
-<span class="btn-paint"></span>
-<span class="btn-paint"></span>
-<span id="btn-label"> design</span>
-                    </button>
-                        <span class="empty"> design</span>
-                    ,
-                    
-
-                    <span class="code-hover" onMouseEnter={handleCodeMouseEnter} onMouseLeave={handleCodeMouseLeave}> code</span>, 
-                    
-                    <a href="https://pin.it/4ZcBf6e" target="_blank"><span class="empty" id="paint"><span class="temp_paint"></span><span class="highlight"></span> paint</span></a> and <span class="aiAnimation" 
-      onMouseEnter={handleMouseEnter}
-      onMouseLeave={handleMouseLeave} ><span class="empty">deploy AI</span><div className={`loader ${isHovered ? 'hovered' : ''}`}>
-      <div className="line"></div>
-      <div className="line"></div>
-      <div className="line"></div>
-      <div className="line"></div>
-      <div className="line"></div>
-    </div></span>
-      
-      </h1>
-                    <h1 class="desp">A data engineer passionate about AI and ML, with 2 years' experience in data modeling, ETL, and data warehousing. Proficient in SQL, NoSQL, and cloud solutions like AWS and GCP. I specialize in AI, including deep learning, NLP, and computer vision, and enjoy tackling real-world challenges. Collaborative and innovative, I optimize workflows and seek opportunities to apply AI in the fusion of UI/UX for diverse fields like healthcare, finance, and marketing. </h1>
-                    </div>
-                </div>
-                <a class="down" href="#portfolio">
-                    <img id="first" src="assets/down.png" alt=""/>
-                    <img id="second" src="assets/down.png" alt="" />
-                    <img id="third" src="assets/down.png" alt="" />
-                </a>
-
-                
-            </div>
+  return (
+    <section className="intro" id="intro" aria-labelledby="intro-name">
+      <div className={`intro-art effect-${effect || "idle"}`} ref={artRef}>
+        <div className="portrait-stage">
+          <div className="portrait-halo" aria-hidden="true" />
+          <svg className="portrait-network" viewBox="0 0 500 500" fill="none" aria-hidden="true">
+            <circle cx="250" cy="250" r="210" className="network-ring" />
+            <ellipse cx="250" cy="250" rx="225" ry="130" transform="rotate(-32 250 250)" className="network-orbit" />
+            <ellipse cx="250" cy="250" rx="225" ry="130" transform="rotate(32 250 250)" className="network-orbit orbit-secondary" />
+            <path d="M95 105 250 250 410 110M80 355 250 250 415 360" className="network-connections" />
+            <g className="network-satellite"><circle cx="250" cy="40" r="5" /></g>
+            <g className="network-satellite satellite-secondary"><circle cx="250" cy="40" r="3" /></g>
+          </svg>
+          {effect === "code" && <canvas className="canvas-bg" ref={canvasRef} aria-hidden="true" />}
+          <img className="intro-portrait" src="assets/man_illustrator_wwithout_eyes.png" alt="Illustration of Varshil Shah" />
+          <div className="concept-nodes" aria-label="Explore AI concepts">{concepts.map((item, index) => <button type="button" key={item.name} className={`concept-node node-${index}`} aria-pressed={concept === index} onClick={() => setConcept(index)}><span className="node-dot" aria-hidden="true" />{item.name}</button>)}</div>
+          <span className="human-label">HUMAN IN THE LOOP</span>
         </div>
-    )
+        <div className="concept-caption" aria-live="polite"><span className="concept-index">0{concept + 1} / AI SYSTEMS</span><h3>{concepts[concept].label}</h3><p>{concepts[concept].detail}</p></div>
+      </div>
+      <div className="intro-content">
+        <p className="intro-greeting">AI ENGINEERING × CREATIVE THINKING</p>
+        <h1 id="intro-name">Varshil Shah</h1>
+        <p className="intro-role" aria-label={roles.join(", ")}>
+          <span aria-hidden="true">{typedRole}<span className="intro-cursor">|</span></span>
+        </p>
+        <h2 className="intro-skills">
+          <span>I </span>
+          <span className="skill-word"><button type="button" className="skill-design" {...interaction("design")}><span className="design-label" data-text="design">design</span><span className="design-aura" aria-hidden="true" /></button>, </span>
+          <span className="skill-word"><button type="button" className="skill-code" aria-label="code" {...interaction("code")}><span className="code-label" aria-hidden="true">code<span className="code-decoded">{decodedCode}<i /></span></span><span className="code-bracket bracket-left" aria-hidden="true">&lt;</span><span className="code-bracket bracket-right" aria-hidden="true">/&gt;</span></button> </span>
+          <span>and </span>
+          <button type="button" className="skill-ai" {...interaction("ai")}><span className="deploy-label" data-text="deploy AI">deploy AI</span><span className="deploy-orbit" aria-hidden="true"><i /><i /></span><span className="deploy-status" aria-hidden="true"><i />MODEL → LIVE</span></button>
+        </h2>
+        <a className="intro-artwork" href="https://pin.it/4ZcBf6e" target="_blank" rel="noreferrer">Beyond engineering → My artwork ↗</a>
+        <p className="intro-description">I build AI systems that work beyond the demo: agents that connect to real tools, RAG grounded in enterprise data, and pipelines designed for reliability. At TD SYNNEX, I turn complex workflows into observable, human-guided automation.</p>
+        <button className="intro-explore" type="button" onClick={() => document.getElementById("portfolio")?.scrollIntoView({ behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth" })}>Explore selected work <span aria-hidden="true">↓</span></button>
+      </div>
+    </section>
+  );
 }
+
+
+
+
+
+
+
+
+

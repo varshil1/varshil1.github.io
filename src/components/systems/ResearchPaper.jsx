@@ -1,0 +1,18 @@
+import { useState } from 'react';
+import './researchPaper.scss';
+const views = [
+ { label: 'Question', title: 'Can a model recognize Indian coins?', text: 'A computer-vision study of coin classification, exploring how learned visual features distinguish everyday objects.' },
+ { label: 'Method', title: 'Compare architectures. Transfer knowledge.', text: 'The study compared more than ten CNN architectures and used transfer learning for Indian coin classification.' },
+ { label: 'Finding', title: '97% classification accuracy.', text: 'The reported result for this study. It describes performance in the research setting, rather than a guarantee for every real-world image.' }
+];
+export default function ResearchPaper() {
+ const [active,setActive]=useState(0);
+ return <article className="research-publication" aria-labelledby="research-title">
+  <a className="paper-preview" href="https://ieeexplore.ieee.org/abstract/document/10041089" target="_blank" rel="noreferrer" aria-label="Open the coin classification research paper on IEEE Xplore">
+   <div className="paper-sheet"><div className="paper-masthead"><span>RESEARCH PAPER</span><span>↗</span></div><p className="paper-topic">COMPUTER VISION / TRANSFER LEARNING</p><h3>Indian coin<br/>classification</h3><p className="paper-caption">Study overview · illustrative preview</p>
+   <svg viewBox="0 0 320 140" fill="none" aria-hidden="true"><defs><pattern id="research-dots" width="16" height="16" patternUnits="userSpaceOnUse"><circle cx="1" cy="1" r="1" fill="currentColor" opacity=".15"/></pattern></defs><rect width="320" height="140" fill="url(#research-dots)"/><circle cx="65" cy="70" r="34" stroke="currentColor" strokeWidth="2"/><circle cx="65" cy="70" r="27" stroke="currentColor" strokeDasharray="3 4"/><text x="65" y="78" textAnchor="middle" fill="currentColor" fontSize="24">₹</text><path d="M105 70h45m-7-6 7 6-7 6M205 70h35m-7-6 7 6-7 6" stroke="currentColor"/><rect x="155" y="44" width="44" height="52" rx="8" stroke="currentColor"/><path d="M165 56h24m-24 10h24m-24 10h24m-24 10h14" stroke="currentColor" opacity=".6"/><circle cx="267" cy="70" r="22" stroke="currentColor"/><path d="m257 70 7 7 14-16" stroke="currentColor" strokeWidth="2"/></svg>
+   <div className="paper-columns" aria-hidden="true">{[0,1].map(i=><div key={i}>{[88,100,95,100,68].map((width,j)=><span key={j} style={{width:`${width}%`}}/>)}</div>)}</div><div className="paper-bottom"><span>IEEE XPLORE</span><span>10041089</span></div></div><span className="paper-open">Open published paper ↗</span>
+  </a>
+  <div className="research-story"><p className="section-eyebrow">PUBLISHED RESEARCH · IEEE XPLORE</p><h2 id="research-title">A question.<br/>An experiment.<br/><span>A published finding.</span></h2><p className="research-context">Indian coin classification using CNNs and transfer learning. Research associate work · June–December 2021.</p><div className="research-switcher" aria-label="Explore the study">{views.map((view,index)=><button type="button" key={view.label} aria-pressed={active===index} onClick={()=>setActive(index)}><span>0{index+1}</span> {view.label}</button>)}</div><div className="research-reading" key={active} aria-live="polite"><h3>{views[active].title}</h3><p>{views[active].text}</p></div><div className="research-facts"><div><strong>10+</strong><span>CNN architectures compared</span></div><div><strong>97%</strong><span>Reported accuracy</span></div></div><a className="research-link" href="https://ieeexplore.ieee.org/abstract/document/10041089" target="_blank" rel="noreferrer">Read the publication on IEEE Xplore ↗</a></div>
+ </article>;
+}

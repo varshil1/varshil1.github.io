@@ -1,40 +1,40 @@
 export const featuredPortfolio = [
     {
       id: 1,
-      title: "Voice based AI -Portfolio website",
+      title: "Voice-driven AI portfolio",
       img:
         "assets/web1.png",
         link:"https://www.loom.com/share/0fb30156346042d586bcb3899d65cb8f"
     },
     {
       id: 2,
-      title: "Covid 19 Analysis using PGM",
+      title: "COVID-19 analysis with probabilistic graphical models",
       img:
         "assets/covid.jpg",
         link:"https://github.com/varshil1/Covid_19_Analysis_Using_PGM"
     },
     {
       id: 3,
-      title: "Finance management system",
+      title: "Personal finance management",
       img:
-        "https://cdn.dribbble.com/users/1387827/screenshots/15466426/media/deb2dca6762cd3610321c98bfccb0b72.png?compress=1&resize=1200x900",
+        "assets/finance.png",
       link:"https://github.com/varshil1/Financial_Management-main"
       },
     {
       id: 4,
-      title: "Smart movie recommendation",
+      title: "Movie recommendation system",
       img:
         "assets/movie.jpg",
       link:"https://github.com/varshil1/CSE523-Machine-Learning-SSSR"
     },
     { id: 5,
-      title: "Algorithmic paper trading using DRL",
+      title: "Reinforcement learning for paper trading",
       img:"assets/alpaca.png",
       link:"https://github.com/varshil1/Algorithmic-paper-trading-using-Deep-Reinforcement-Learning"
     },
     {
       id: 6,
-      title: "Social distancing detector using opencv",
+      title: "Computer vision for social distancing",
       img:
         "assets/socio.jpg",
       link:"https://github.com/varshil1/Social-Distancing-using-OpenCV"
@@ -44,7 +44,7 @@ export const featuredPortfolio = [
   export const webPortfolio = [
     {
       id: 1,
-      title: "Voice based AI -Portfolio website",
+      title: "Voice-driven AI portfolio",
       img:
         "assets/web1.png",
         link:"https://www.loom.com/share/0fb30156346042d586bcb3899d65cb8f"
@@ -52,7 +52,7 @@ export const featuredPortfolio = [
     {
       id: 2,
       title: "IDENTI-TEE shopping website",
-      img: "https://cdn.dribbble.com/users/5031392/screenshots/15467520/media/c36b3b15b25b1e190d081abdbbf947cf.png?compress=1&resize=1200x900",
+      img: "assets/identite.png",
       link:""
     },
     {
@@ -62,7 +62,7 @@ export const featuredPortfolio = [
       link:"https://github.com/varshil1/Financial_Management-main"
     },{
       id: 4,
-      title: "Animated resonsice website for PClub",
+      title: "Responsive developer club website",
       img: "assets/pclub.JPG",
       link:"https://github.com/varshil1/Animated-Responsive-website"
     },{
@@ -86,7 +86,7 @@ export const featuredPortfolio = [
       id: 2,
       title: "Find best Mentor",
       img:
-        "https://cdn.dribbble.com/users/1998175/screenshots/15459384/media/48ac2b43ebe81ba0866afea1383cc939.png?compress=1&resize=1200x900",
+        "assets/mentor.png",
       link:""
       },
     
@@ -95,27 +95,27 @@ export const featuredPortfolio = [
   export const designPortfolio = [
     {
       id: 1,
-      title: "Covid 19 Analysis using PGM",
+      title: "COVID-19 analysis with probabilistic graphical models",
       img:
         "assets/covid.jpg",
         link:"https://github.com/varshil1/Covid_19_Analysis_Using_PGM"
        },
     {
       id: 2,
-      title: "Smart movie recommendation",
+      title: "Movie recommendation system",
       img:
         "assets/movie.jpg",
       link:"https://github.com/varshil1/CSE523-Machine-Learning-SSSR"
       },
     {
       id: 3,
-      title: "Algorithmic paper trading using DRL",
+      title: "Reinforcement learning for paper trading",
       img:"assets/alpaca.png",
       link:"https://github.com/varshil1/Algorithmic-paper-trading-using-Deep-Reinforcement-Learning"
     },
     {
       id: 4,
-      title: "Social distancing detector using opencv",
+      title: "Computer vision for social distancing",
       img:
         "assets/socio.jpg",
         link:"https://github.com/varshil1/Social-Distancing-using-OpenCV"

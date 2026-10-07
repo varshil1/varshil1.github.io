@@ -40,3 +40,6 @@
         }
     }
 }
+.app .menu { box-sizing: border-box; padding: 90px 0 24px; overflow-y: auto; }
+.app .menu ul { margin: auto 0; flex-shrink: 0; }
+.app .menu ul li { margin-bottom: 18px; }
